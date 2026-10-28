@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Run a Grocery Store - Staff & Rules</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #0f1a14;
+      --bg-2: #13241b;
+      --glass: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --text: #eef6f0;
+      --muted: #9fb5a7;
+      --accent: #4ade80;
+      --accent-2: #22c55e;
+      --glow: rgba(74, 222, 128, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+      background: linear-gradient(160deg, var(--bg-1), var(--bg-2));
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Floating background blobs */
+    .bg-blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.35;
+      z-index: -1;
+      animation: float 18s ease-in-out infinite;
+    }
+    .blob-1 { width: 420px; height: 420px; background: var(--accent-2); top: -120px; left: -120px; }
+    .blob-2 { width: 360px; height: 360px; background: #0ea5e9; bottom: -100px; right: -100px; animation-delay: -6s; }
+    .blob-3 { width: 260px; height: 260px; background: #facc15; top: 40%; left: 60%; opacity: 0.15; animation-delay: -12s; }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(40px, -30px) scale(1.1); }
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 80px 20px 60px;
+      animation: fadeDown 0.9s ease both;
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border: 1px solid var(--glass-border);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--glass);
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2.2rem, 6vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.1;
+      background: linear-gradient(90deg, #fff, var(--accent), #fff);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 6s linear infinite;
+    }
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+
+    /* Glass cards */
+    .card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 28px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+      animation: fadeUp 0.8s ease both;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(74, 222, 128, 0.4);
+      box-shadow: 0 16px 50px var(--glow);
+    }
+    .card:nth-child(2) { animation-delay: 0.15s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+
+    h2 {
+      margin: 0 0 20px;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2::before {
+      content: "";
+      width: 6px;
+      height: 22px;
+      border-radius: 3px;
+      background: linear-gradient(var(--accent), var(--accent-2));
+      box-shadow: 0 0 12px var(--glow);
+    }
+
+    /* Roster */
+    .roster {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 14px;
+    }
+    .role {
+      padding: 16px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--glass-border);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .role:hover {
+      transform: scale(1.03);
+      border-color: var(--accent);
+    }
+    .code {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #0f1a14;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .role-name {
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    .staff {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .none {
+      color: var(--muted);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    /* Rules */
+    .placeholder {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-style: italic;
+      margin: -10px 0 18px;
+    }
+    ol.rules {
+      list-style: none;
+      counter-reset: rule;
+      padding: 0;
+      margin: 0;
+    }
+    ol.rules li {
+      counter-increment: rule;
+      position: relative;
+      padding: 14px 16px 14px 60px;
+      margin-bottom: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      border: 1px solid transparent;
+      transition: border-color 0.25s ease, background 0.25s ease;
+      animation: slideIn 0.6s ease both;
+    }
+    ol.rules li:nth-child(2) { animation-delay: 0.08s; }
+    ol.rules li:nth-child(3) { animation-delay: 0.16s; }
+    ol.rules li:nth-child(4) { animation-delay: 0.24s; }
+    ol.rules li:nth-child(5) { animation-delay: 0.32s; }
+    ol.rules li:hover {
+      border-color: rgba(74, 222, 128, 0.4);
+      background: rgba(74, 222, 128, 0.06);
+    }
+    ol.rules li::before {
+      content: counter(rule, decimal-leading-zero);
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    /* Developer */
+    .dev {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .avatar {
+      width: 56px;
+      height: 56px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: #0f1a14;
+      background: linear-gradient(135deg, var(--accent), #0ea5e9);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    .dev p { margin: 0; color: var(--muted); }
+    .dev strong { color: var(--text); }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      padding-bottom: 40px;
+    }
+
+    /* Animations */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes shine {
+      to { background-position: 200% center; }
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 var(--glow); }
+      50% { box-shadow: 0 0 0 12px rgba(74, 222, 128, 0); }
+    }
+
+    /* Respect users who prefer less motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 60px 16px 40px; }
+      .card { padding: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+
+  <header>
+    <span class="badge">Official Staff Page</span>
+    <h1>Run a Grocery Store</h1>
+    <p>Staff Roster &amp; Rules</p>
+  </header>
+
+  <main>
+
+    <section class="card">
+      <h2>Staff Roster</h2>
+      <div class="roster">
+        <div class="role">
+          <span class="code">OWN</span>
+          <div class="role-name">Owner</div>
+          <div class="staff">Ron, Victoria</div>
+        </div>
+        <div class="role">
+          <span class="code">COWN</span>
+          <div class="role-name">Co-Owner</div>
+          <div class="staff">miyanna <span style="color:var(--muted);font-weight:400">(miyannapot)</span></div>
+        </div>
+        <div class="role">
+          <span class="code">HDEV</span>
+          <div class="role-name">Head Developer</div>
+          <div class="staff">Kody</div>
+        </div>
+        <div class="role">
+          <span class="code">HMGT</span>
+          <div class="role-name">Head Manager</div>
+          <div class="staff">Locar</div>
+        </div>
+        <div class="role">
+          <span class="code">ADM</span>
+          <div class="role-name">Administrators</div>
+          <div class="staff none">None</div>
+        </div>
+        <div class="role">
+          <span class="code">TADM</span>
+          <div class="role-name">Trial Administrators</div>
+          <div class="staff none">None</div>
+        </div>
+        <div class="role">
+          <span class="code">MOD</span>
+          <div class="role-name">Moderators</div>
+          <div class="staff none">None</div>
+        </div>
+        <div class="role">
+          <span class="code">OVS</span>
+          <div class="role-name">Overseers</div>
+          <div class="staff none">None</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Rules</h2>
+      <p class="placeholder">Palitan ang mga halimbawang rules na ito ng totoong rules ng server.</p>
+      <ol class="rules">
+        <li>Respect all staff members and players.</li>
+        <li>No exploiting, cheating, or abusing bugs.</li>
+        <li>No spamming or advertising in the game chat.</li>
+        <li>Follow the instructions of staff members with the correct role.</li>
+        <li>Report problems to a staff member instead of handling them yourself.</li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <h2>Developer</h2>
+      <div class="dev">
+        <div class="avatar">K</div>
+        <p>This site was made by <strong>Kody</strong>, Head Developer.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    &copy; Run a Grocery Store. All rights reserved.
+  </footer>
+
+</body>
+</html>
